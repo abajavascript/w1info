@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#example config string in dtoverlay=w1-gpio,gpiopin=21
+#dtoverlay=w1-gpio,gpiopin=21
+
 BOOT_CONFIG_TXT=/boot/config.txt
 #BOOT_CONFIG_TXT=/home/pi/w1status/config.txt.test
 
@@ -32,6 +35,13 @@ gpio () {
 			echo $W1GPIOPIN | awk -F\= '{print $2}'
 		fi
 	fi
+}
+
+usage () {
+	echo $0 [command]
+	echo "command"
+	echo "  status or <empty> - return w1 status on booting"
+	echo "  gpio - pin where 1-wire protocol configured"
 }
 
 case "$1" in
