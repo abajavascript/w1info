@@ -1,0 +1,47 @@
+#!/bin/bash
+
+BOOT_CONFIG_TXT=/boot/config.txt
+BOOT_CONFIG_TXT=/home/pi/w1status/config.txt.test
+
+w1overlay () {
+	W1OVERLAY=`cat $BOOT_CONFIG_TXT | grep -e "^\s*dtoverlay\s*=\s*w1-gpio"`
+}
+
+w1gpiopin () {
+	W1GPIOPIN=`echo $W1OVERLAY | tr ',' '\n' | grep -e "gpiopin"`
+}
+
+status () {
+	w1overlay
+	if [ -z $W1OVERLAY ]; then
+		echo no
+	else
+		echo yes
+	fi
+}
+
+gpio () {
+	w1overlay
+	if [ -z $W1OVERLAY ]; then
+		echo none
+	else
+		w1gpiopin
+		if [ -z $W1GPIOPIN ]; then
+			echo '4'
+		else
+			echo $W1GPIOPIN | awk -F\= '{print $2}'
+		fi
+	fi
+}
+
+case "$1" in
+	status | "")
+	    status
+	    ;;
+	gpio | "")
+	    gpio
+	    ;;
+	*)
+	    usage
+	    ;;
+esac
